@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aishwarya Kishor Lavate — Data Science & ML Engineer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        space: {
+                            900: '#0a0e1a',
+                            800: '#121829',
+                            700: '#1e2640',
+                            600: '#2d3748',
+                        },
+                        accent: {
+                            DEFAULT: '#f97316', // Vibrant amber/orange accent matching design
+                            light: '#fb923c',
+                            dark: '#c2410c'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0e1a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        canvas#constellation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glass-card {
+            background: rgba(18, 24, 41, 0.75);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(249, 115, 22, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(249, 115, 22, 0.2);
+        }
+        .glass-nav {
+            background: rgba(10, 14, 26, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0e1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e2640;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2d3748;
+        }
+    </style>
+</head>
+<body class="bg-space-900 text-gray-100 relative selection:bg-accent selection:text-white">
+
+    <canvas id="constellation"></canvas>
+
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#hero" class="flex items-center space-x-3 group">
+                <div class="w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_#f97316] animate-pulse"></div>
+                <span class="font-bold text-lg tracking-tight text-white group-hover:text-accent transition-colors">Aishwarya Lavate</span>
+            </a>
+            
+            <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-gray-300">
+                <a href="#about" class="hover:text-accent transition-colors">What I Do</a>
+                <a href="#architectures" class="hover:text-accent transition-colors">Architectures</a>
+                <a href="#projects" class="hover:text-accent transition-colors">Projects</a>
+                <a href="#toolkit" class="hover:text-accent transition-colors">Toolkit</a>
+                <a href="#education" class="hover:text-accent transition-colors">Education</a>
+                <a href="#contact" class="hover:text-accent transition-colors">Contact</a>
+            </nav>
+
+            <div class="hidden lg:block">
+                <a href="#contact" class="px-5 py-2.5 rounded-full border border-gray-700 hover:border-accent text-sm font-semibold transition-all hover:bg-accent/10">
+                    Get in touch
+                </a>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="menu-btn" class="lg:hidden text-gray-300 hover:text-white focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden glass-nav border-t border-gray-800 px-6 pt-4 pb-6 space-y-3">
+            <a href="#about" class="block py-2 text-gray-300 hover:text-accent font-medium">What I Do</a>
+            <a href="#architectures" class="block py-2 text-gray-300 hover:text-accent font-medium">Architectures</a>
+            <a href="#projects" class="block py-2 text-gray-300 hover:text-accent font-medium">Projects</a>
+            <a href="#toolkit" class="block py-2 text-gray-300 hover:text-accent font-medium">Toolkit</a>
+            <a href="#education" class="block py-2 text-gray-300 hover:text-accent font-medium">Education</a>
+            <a href="#contact" class="block py-2 text-gray-300 hover:text-accent font-medium">Contact</a>
+        </div>
+    </header>
+
+    <section id="hero" class="relative z-10 pt-32 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
+        <div class="flex-1 space-y-6 text-center lg:text-left">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-space-800 border border-gray-700 text-xs text-accent font-medium tracking-wide shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+                <span>Data Science Student & ML Enthusiast</span>
+            </div>
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-tight">
+                Aishwarya <br class="hidden sm:inline">Kishor Lavate
+            </h1>
+            <p class="text-lg text-gray-300 max-w-2xl font-light leading-relaxed">
+                I engineer robust data science models and machine learning systems that solve real problems in production. Currently studying B.Sc. Data Science 3rd Year at D. Y. Patil Agriculture and Technical University with an exceptional <span class="text-accent font-semibold">9.08 CGPA</span>.
+            </p>
+            
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-2">
+                <span class="px-3 py-1 bg-space-800 border border-gray-700 rounded-md text-xs font-mono text-gray-300">Python</span>
+                <span class="px-3 py-1 bg-space-800 border border-gray-700 rounded-md text-xs font-mono text-gray-300">Scikit-Learn</span>
+                <span class="px-3 py-1 bg-space-800 border border-gray-700 rounded-md text-xs font-mono text-gray-300">Pandas & NumPy</span>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                <a href="#contact" class="px-7 py-3.5 rounded-full bg-accent hover:bg-accent-dark text-white font-medium transition-all shadow-[0_0_20px_rgba(249,115,22,0.4)]">
+                    Get In Touch
+                </a>
+                <a href="https://github.com/aishwaryalavate1502-glitch" target="_blank" class="px-7 py-3.5 rounded-full border border-gray-700 hover:border-gray-500 font-medium transition-all flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="px-7 py-3.5 rounded-full border border-gray-700 hover:border-gray-500 font-medium transition-all flex items-center gap-2">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+        </div>
+
+        <!-- Hero Card with Aishwarya's Exact User Photo -->
+        <div class="w-full max-w-md lg:max-w-md">
+            <div class="glass-card p-5 rounded-2xl relative shadow-2xl overflow-hidden group">
+                <div class="absolute -right-16 -top-16 w-48 h-48 bg-accent/15 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="flex items-center justify-between pb-3 border-b border-gray-800 text-xs text-gray-400 font-mono">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                        <span>Aishwarya_DataScience_Core.ipynb</span>
+                    </div>
+                    <span>DY Patil University</span>
+                </div>
+                
+                <div class="pt-5 pb-3 text-center space-y-4">
+                    <div class="w-52 h-52 mx-auto rounded-2xl bg-gradient-to-tr from-accent to-blue-600 p-1 shadow-xl overflow-hidden relative">
+                        <!-- User's Exact Uploaded Photograph -->
+                        <img src="C:\Users\Admin\Downloads\WhatsApp Image 2026-09-15 at 12.53.26 PM.jpeg" alt="Aishwarya Kishor Lavate" class="w-full h-full object-cover rounded-xl filter contrast-105" onerror="this.src='https://placehold.co/400x400/121829/f97316?text=Aishwarya+Lavate'">
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Aishwarya Kishor Lavate</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">B.Sc. Data Science (3rd Year)</p>
+                        <div class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/20 text-accent text-xs font-semibold font-mono">
+                            <i class="fa-solid fa-graduation-cap"></i> CGPA: 9.08 / 10
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <h2 class="text-xs uppercase font-mono tracking-widest text-accent">Core Expertise</h2>
+            <h3 class="text-3xl sm:text-4xl font-bold text-white">What I Do</h3>
+            <p class="text-gray-400">
+                Building robust data science pipelines, predictive models, and interactive computer vision applications.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="glass-card p-8 rounded-2xl space-y-4">
+                <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center text-accent text-xl">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">Machine Learning & Predictive Modeling</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Training regression models and classification algorithms using Scikit-Learn to accurately forecast continuous values and financial transactions.
+                </p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl space-y-4">
+                <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center text-accent text-xl">
+                    <i class="fa-solid fa-database"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">Data Engineering & Pipelines</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Cleaning, transforming, and structuring large datasets with Pandas, NumPy, and SQL for high-performance machine learning ingestion.
+                </p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl space-y-4">
+                <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center text-accent text-xl">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">Computer Vision & MediaPipe</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Developing real-time hand-tracking pipelines with Python, OpenCV, and MediaPipe to detect 21 3D hand landmarks and spatial interactions.
+                </p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl space-y-4">
+                <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center text-accent text-xl">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">Exploratory Data Analysis</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Uncovering hidden statistical correlations and data distributions using Jupyter Notebook visualizations, Seaborn, and Matplotlib.
+                </p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl space-y-4">
+                <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center text-accent text-xl">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">Interactive Web Games</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Designing fast-paced action survival games (such as DODGE. SURVIVE. DOMINATE) utilizing HTML5 canvas, responsive layouts, and clean JS logic.
+                </p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl space-y-4">
+                <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center text-accent text-xl">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">Academic Excellence</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Maintaining a top-tier 9.08 CGPA in B.Sc. Data Science at D. Y. Patil Agriculture and Technical University with rigorous coursework.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="architectures" class="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+            <h2 class="text-xs uppercase font-mono tracking-widest text-accent">Interactive Pipeline Tracer</h2>
+            <h3 class="text-3xl sm:text-4xl font-bold text-white">How My Data Systems Execute</h3>
+            <p class="text-gray-400">Select a phase below to inspect my end-to-end data science and machine learning workflow.</p>
+        </div>
+
+        <div class="glass-card p-6 sm:p-10 rounded-3xl space-y-8">
+            <!-- Pipeline Nodes Bar -->
+            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 overflow-x-auto pb-4">
+                <button onclick="setWorkflowStep(0)" id="step-btn-0" class="workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-accent text-white shadow-lg">1. Ingest</button>
+                <div class="hidden sm:block w-6 h-0.5 bg-gray-700"></div>
+                <button onclick="setWorkflowStep(1)" id="step-btn-1" class="workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-space-800 text-gray-400 hover:text-white border border-gray-700">2. Clean</button>
+                <div class="hidden sm:block w-6 h-0.5 bg-gray-700"></div>
+                <button onclick="setWorkflowStep(2)" id="step-btn-2" class="workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-space-800 text-gray-400 hover:text-white border border-gray-700">3. Feature Eng</button>
+                <div class="hidden sm:block w-6 h-0.5 bg-gray-700"></div>
+                <button onclick="setWorkflowStep(3)" id="step-btn-3" class="workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-space-800 text-gray-400 hover:text-white border border-gray-700">4. Train</button>
+                <div class="hidden sm:block w-6 h-0.5 bg-gray-700"></div>
+                <button onclick="setWorkflowStep(4)" id="step-btn-4" class="workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-space-800 text-gray-400 hover:text-white border border-gray-700">5. Evaluate</button>
+                <div class="hidden sm:block w-6 h-0.5 bg-gray-700"></div>
+                <button onclick="setWorkflowStep(5)" id="step-btn-5" class="workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-space-800 text-gray-400 hover:text-white border border-gray-700">6. Deploy</button>
+                <div class="hidden sm:block w-6 h-0.5 bg-gray-700"></div>
+                <button onclick="setWorkflowStep(6)" id="step-btn-6" class="workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-space-800 text-gray-400 hover:text-white border border-gray-700">7. Monitor</button>
+            </div>
+
+            <!-- Pipeline Step Detail Box -->
+            <div id="workflow-content" class="bg-space-900/80 border border-gray-800 p-6 sm:p-8 rounded-2xl space-y-4">
+                <div class="flex items-center justify-between">
+                    <span id="wf-step-num" class="text-xs font-mono text-accent uppercase tracking-wider">Phase 01 / 07</span>
+                    <span id="wf-tech" class="px-3 py-1 rounded-full bg-accent/20 text-accent text-xs font-mono">Pandas & APIs</span>
+                </div>
+                <h4 id="wf-title" class="text-2xl font-bold text-white">Data Ingestion & Dataset Sourcing</h4>
+                <p id="wf-desc" class="text-gray-300 text-sm leading-relaxed">
+                    Loading raw structured and unstructured datasets from CSV files, SQLite databases, and webcam video streams into memory using optimized Pandas dataframes and NumPy arrays.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <h2 class="text-xs uppercase font-mono tracking-widest text-accent">GitHub Repositories</h2>
+            <h3 class="text-3xl sm:text-4xl font-bold text-white">Featured Projects</h3>
+            <p class="text-gray-400">
+                Explore popular repositories showcasing machine learning regression, fraud detection, computer vision hand tracking, and games.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Project 1 -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between space-y-6">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 text-accent">
+                            <i class="fa-solid fa-house-chimney text-xl"></i>
+                            <span class="font-bold text-base text-white">House-price-prediction-ml</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full bg-space-800 border border-gray-700 text-[11px] text-gray-300 font-mono">Public</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        House Price Prediction using Machine Learning Regression Algorithms. Analyzes structural and spatial features to forecast valuations accurately.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2 text-xs font-mono text-gray-400">
+                        <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+                        <span>Jupyter Notebook</span>
+                    </div>
+                    <a href="https://github.com/aishwaryalavate1502-glitch/House-price-prediction-ml" target="_blank" class="px-4 py-2 rounded-xl bg-space-800 hover:bg-accent hover:text-white transition-all text-xs font-medium border border-gray-700 flex items-center gap-1.5">
+                        <i class="fa-brands fa-github"></i> Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between space-y-6">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 text-accent">
+                            <i class="fa-solid fa-credit-card text-xl"></i>
+                            <span class="font-bold text-base text-white">Credit-Card-Fraud-Detection</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full bg-space-800 border border-gray-700 text-[11px] text-gray-300 font-mono">Public</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        Credit Card Fraud Detection is a Machine Learning project designed to identify fraudulent credit card transactions and distinguish them from legitimate transactions.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2 text-xs font-mono text-gray-400">
+                        <span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span>
+                        <span>Python</span>
+                    </div>
+                    <a href="https://github.com/aishwaryalavate1502-glitch/Credit-Card-Fraud-Detection" target="_blank" class="px-4 py-2 rounded-xl bg-space-800 hover:bg-accent hover:text-white transition-all text-xs font-medium border border-gray-700 flex items-center gap-1.5">
+                        <i class="fa-brands fa-github"></i> Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between space-y-6">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 text-accent">
+                            <i class="fa-solid fa-gamepad text-xl"></i>
+                            <span class="font-bold text-base text-white">DODGE.-SURVIVE-DOMINATE</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full bg-space-800 border border-gray-700 text-[11px] text-gray-300 font-mono">Public</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        DODGE. SURVIVE. DOMINATE. A fast-paced action survival game where players dodge obstacles, survive as long as possible, and achieve high scores.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2 text-xs font-mono text-gray-400">
+                        <span class="w-3 h-3 rounded-full bg-orange-500 inline-block"></span>
+                        <span>HTML</span>
+                    </div>
+                    <a href="https://github.com/aishwaryalavate1502-glitch/DODGE.-SURVIVE-DOMINATE" target="_blank" class="px-4 py-2 rounded-xl bg-space-800 hover:bg-accent hover:text-white transition-all text-xs font-medium border border-gray-700 flex items-center gap-1.5">
+                        <i class="fa-brands fa-github"></i> Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between space-y-6">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 text-accent">
+                            <i class="fa-solid fa-camera text-xl"></i>
+                            <span class="font-bold text-base text-white">Hand-Tracking</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full bg-space-800 border border-gray-700 text-[11px] text-gray-300 font-mono">Public</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        A real-time Hand Tracking System built using Python, OpenCV, and MediaPipe. Detects and tracks human hands through webcam and identifies 3D hand landmarks.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2 text-xs font-mono text-gray-400">
+                        <span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span>
+                        <span>Python</span>
+                    </div>
+                    <a href="https://github.com/aishwaryalavate1502-glitch/Hand-Tracking" target="_blank" class="px-4 py-2 rounded-xl bg-space-800 hover:bg-accent hover:text-white transition-all text-xs font-medium border border-gray-700 flex items-center gap-1.5">
+                        <i class="fa-brands fa-github"></i> Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project 5 -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between space-y-6">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 text-accent">
+                            <i class="fa-solid fa-laptop-code text-xl"></i>
+                            <span class="font-bold text-base text-white">Portfolio</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full bg-space-800 border border-gray-700 text-[11px] text-gray-300 font-mono">Public</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        A responsive personal developer portfolio website built using HTML5, CSS3, and Vanilla JavaScript to showcase skills, education, projects, and certifications.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2 text-xs font-mono text-gray-400">
+                        <span class="w-3 h-3 rounded-full bg-orange-500 inline-block"></span>
+                        <span>HTML</span>
+                    </div>
+                    <a href="https://github.com/aishwaryalavate1502-glitch/Portfolio" target="_blank" class="px-4 py-2 rounded-xl bg-space-800 hover:bg-accent hover:text-white transition-all text-xs font-medium border border-gray-700 flex items-center gap-1.5">
+                        <i class="fa-brands fa-github"></i> Code
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="toolkit" class="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <h2 class="text-xs uppercase font-mono tracking-widest text-accent">Technical Stack</h2>
+            <h3 class="text-3xl sm:text-4xl font-bold text-white">My Toolkit</h3>
+            <p class="text-gray-400">
+                Languages, libraries, and frameworks I leverage to build intelligent data pipelines.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-brands fa-python text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">Python</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-solid fa-book-open text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">Jupyter Notebook</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-solid fa-table text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">Pandas & NumPy</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-solid fa-brain text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">Scikit-Learn</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-solid fa-eye text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">OpenCV & MediaPipe</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-solid fa-database text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">SQL & Databases</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-brands fa-git-alt text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">Git & GitHub</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-brands fa-html5 text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">HTML5 / CSS3</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-brands fa-js text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">JavaScript</h4>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <i class="fa-solid fa-chart-pie text-3xl text-accent"></i>
+                <h4 class="font-semibold text-white text-sm">Data Visualization</h4>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="relative z-10 py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <h2 class="text-xs uppercase font-mono tracking-widest text-accent">Academic Background</h2>
+            <h3 class="text-3xl sm:text-4xl font-bold text-white">Education & Credentials</h3>
+            <p class="text-gray-400">
+                Committed to rigorous academic foundations in data science and technology.
+            </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto space-y-6">
+            <div class="glass-card p-8 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/20 text-accent text-xs font-semibold font-mono">
+                        <i class="fa-solid fa-star"></i> CGPA: 9.08 / 10
+                    </div>
+                    <h4 class="text-2xl font-bold text-white">B.Sc. Data Science (3rd Year)</h4>
+                    <p class="text-gray-300 font-medium">D. Y. Patil Agriculture and Technical University</p>
+                    <p class="text-gray-500 text-sm">Talasande, Kolhapur, Maharashtra</p>
+                </div>
+                <div class="text-right font-mono text-sm text-gray-400">
+                    <span>Aug 2023 — May 2026 (Expected)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="relative z-10 py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center space-y-8">
+        <div class="glass-card p-10 sm:p-16 rounded-3xl relative overflow-hidden space-y-6">
+            <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-accent/15 rounded-full blur-3xl pointer-events-none"></div>
+            <h2 class="text-3xl sm:text-5xl font-bold text-white tracking-tight">Building a data system that needs to run in production?</h2>
+            <p class="text-gray-300 max-w-xl mx-auto font-light">
+                I am open to data science roles and machine learning engineering opportunities. Always excited to discuss advanced models and complex analytical challenges.
+            </p>
+            <div class="pt-2">
+                <a href="mailto:aishwarya.lavate@gmail.com" class="text-xl sm:text-2xl font-mono text-accent hover:underline font-semibold">
+                    aishwarya.lavate@gmail.com
+                </a>
+            </div>
+            <div class="pt-4 flex flex-wrap items-center justify-center gap-4">
+                <a href="mailto:aishwarya.lavate@gmail.com" class="px-8 py-4 rounded-full bg-accent hover:bg-accent-dark text-white font-medium transition-all shadow-[0_0_20px_rgba(249,115,22,0.4)] flex items-center gap-2">
+                    <i class="fa-solid fa-envelope"></i> Send Email
+                </a>
+                <a href="https://github.com/aishwaryalavate1502-glitch" target="_blank" class="px-8 py-4 rounded-full border border-gray-700 hover:border-gray-500 font-medium transition-all flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="px-8 py-4 rounded-full border border-gray-700 hover:border-gray-500 font-medium transition-all flex items-center gap-2">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="relative z-10 border-t border-gray-800 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-sm text-gray-500">
+        <p>© 2026 Aishwarya Kishor Lavate. All rights reserved.</p>
+        <div class="flex items-center space-x-6 mt-4 sm:mt-0">
+            <a href="https://github.com/aishwaryalavate1502-glitch" target="_blank" class="hover:text-accent transition-colors"><i class="fa-brands fa-github text-lg"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="hover:text-accent transition-colors"><i class="fa-brands fa-linkedin text-lg"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Workflow Pipeline Tracer Data
+        const workflowSteps = [
+            {
+                num: "Phase 01 / 07",
+                tech: "Pandas & APIs",
+                title: "Data Ingestion & Dataset Sourcing",
+                desc: "Loading raw structured and unstructured datasets from CSV files, SQLite databases, and webcam video streams into memory using optimized Pandas dataframes and NumPy arrays."
+            },
+            {
+                num: "Phase 02 / 07",
+                tech: "Data Cleaning & Imputation",
+                desc: "Handling missing values, outlier removal, encoding categorical variables, and normalizing input features to ensure high data quality prior to modeling."
+            },
+            {
+                num: "Phase 03 / 07",
+                tech: "Feature Engineering & EDA",
+                desc: "Visualizing feature correlations, distributions, and target relationships using Jupyter Notebooks and statistical plots to unearth hidden patterns."
+            },
+            {
+                num: "Phase 04 / 07",
+                tech: "Scikit-Learn & Regression",
+                desc: "Training regression models, classifiers, and computer vision pipelines (such as MediaPipe hand-tracking) with robust train-test splits and cross-validation."
+            },
+            {
+                num: "Phase 05 / 07",
+                tech: "Evaluation & Metrics",
+                desc: "Validating model performance using MSE, RMSE, R-squared scores, precision, recall, and F1-scores to guarantee predictive reliability."
+            },
+            {
+                num: "Phase 06 / 07",
+                tech: "Production Deployment",
+                desc: "Packaging machine learning models and web applications for live deployment on Render and GitHub Pages with automated workflows."
+            },
+            {
+                num: "Phase 07 / 07",
+                tech: "Monitoring & Maintenance",
+                desc: "Continuously observing model inference latency, drift detection, and logging performance metrics for production stability."
+            }
+        ];
+
+        function setWorkflowStep(index) {
+            for (let i = 0; i < 7; i++) {
+                const btn = document.getElementById(`step-btn-${i}`);
+                if (i === index) {
+                    btn.className = "workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-accent text-white shadow-lg";
+                } else {
+                    btn.className = "workflow-btn px-4 py-2 rounded-xl text-xs font-mono transition-all bg-space-800 text-gray-400 hover:text-white border border-gray-700";
+                }
+            }
+
+            const step = workflowSteps[index];
+            document.getElementById('wf-step-num').innerText = step.num;
+            document.getElementById('wf-tech').innerText = step.tech;
+            document.getElementById('wf-title').innerText = step.title;
+            document.getElementById('wf-desc').innerText = step.desc;
+        }
+
+        // Constellation Particle Effect
+        const canvas = document.getElementById('constellation');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const particleCount = Math.min(Math.floor((width * height) / 12000), 80);
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: Math.random() * 1.5 + 1
+            });
+        }
+
+        function animateConstellation() {
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.fillStyle = 'rgba(249, 115, 22, 0.5)';
+            ctx.strokeStyle = 'rgba(249, 115, 22, 0.12)';
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0) p.x = width;
+                if (p.x > width) p.x = 0;
+                if (p.y < 0) p.y = height;
+                if (p.y > height) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dx = p.x - p2.x;
+                    let dy = p.y - p2.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateConstellation);
+        }
+
+        animateConstellation();
+    </script>
+</body>
+</html>
